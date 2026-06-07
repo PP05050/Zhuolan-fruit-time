@@ -261,4 +261,32 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
     }
+    // ==========================================
+    // 自動偵測當季水果日曆系統
+    // ==========================================
+    const currentMonth = new Date().getMonth() + 1; // 取得顧客裝置的真實月份 (1-12)
+    
+    // 定義各項水果產季所涵蓋的月份陣列
+    const fruitSeasons = {
+        'citrus': [11, 12, 1, 2, 3, 4, 5],
+        'carambola': [9, 10, 11, 12, 1, 2, 3, 4],
+        'grape': [7, 8, 9, 12, 1, 2],
+        'pear': [5, 6, 7, 9, 10]
+    };
+
+    const calendarRows = document.querySelectorAll('#season-calendar tbody tr');
+    
+    if (calendarRows.length > 0) {
+        calendarRows.forEach(row => {
+            const fruitType = row.getAttribute('data-fruit');
+            
+            // 比對目前月份是否包含在該水果的產季陣列中
+            if (fruitType && fruitSeasons[fruitType].includes(currentMonth)) {
+                // 如果是當季，自動加上淡黃色背景與當季標籤
+                row.classList.add('active-season');
+                const nameCell = row.querySelector('.fruit-name');
+                nameCell.innerHTML += ' <span class="current-tag">當季</span>';
+            }
+        });
+    }
 });
