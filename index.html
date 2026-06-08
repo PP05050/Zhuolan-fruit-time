@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2T932TGCYS"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-2T932TGCYS');
     </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>卓蘭水果商城｜產地直送水果禮盒・產銷履歷認證・當季水果推薦</title>
@@ -19,24 +16,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script>
 </head>
 <body>
 
     <header class="site-header">
         <div class="container header-wrap">
-             <div class="logo">
+            <div class="logo">
                 <a href="#">
-                <img src="images/logo.png" alt="卓蘭水果商城 Logo" class="logo-img">
+                    <img src="images/logo.png" alt="卓蘭水果商城 Logo" class="logo-img">
+
+                </a>
             </div>
-            <nav class="main-nav">
-                <ul>
+            
+            <button id="hamburger-btn" class="hamburger-btn" aria-label="打開選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="main-nav">
+                <ul class="nav-menu">
                     <li><a href="#hero">當季產季</a></li>
                     <li><a href="#pain-points">常見困擾</a></li>
                     <li><a href="#grading">水果分級</a></li>
@@ -147,7 +146,10 @@
                 <div class="section-title-wrap"><h2>當季精選水果禮盒推薦</h2></div>
                 <div class="product-grid">
                     <div class="product-card">
-                        <div class="product-image-wrap"><img src="images/carambola-box.jpg" alt="楊桃" class="product-img"><span class="product-tag hot">當季首選</span></div>
+                        <div class="product-image-wrap">
+                            <img src="images/carambola-box.jpg" alt="楊桃" class="product-img">
+                            <div class="product-tag-container" data-fruit="carambola"></div>
+                        </div>
                         <div class="product-info">
                             <h3>【產地直送】卓蘭特級正宗楊桃禮盒</h3>
                             <p class="product-desc">源自大安溪流域，色澤金黃飽滿，多汁爽脆，具備完整產銷履歷。</p>
@@ -159,7 +161,10 @@
                         </div>
                     </div>
                     <div class="product-card">
-                        <div class="product-image-wrap"><img src="images/grape-box.jpg" alt="葡萄" class="product-img"><span class="product-tag">季節預購</span></div>
+                        <div class="product-image-wrap">
+                            <img src="images/grape-box.jpg" alt="葡萄" class="product-img">
+                            <div class="product-tag-container" data-fruit="grape"></div>
+                        </div>
                         <div class="product-info">
                             <h3>【溫室巨峰】卓蘭巨峰葡萄珍藏禮盒</h3>
                             <p class="product-desc">黑鑽石般的天然果粉，高糖酸比，富含濃郁果香，親子家庭最愛。</p>
@@ -171,7 +176,10 @@
                         </div>
                     </div>
                     <div class="product-card">
-                        <div class="product-image-wrap"><img src="images/pear-box.jpg" alt="水梨" class="product-img"><span class="product-tag">限量嚴選</span></div>
+                        <div class="product-image-wrap">
+                            <img src="images/pear-box.jpg" alt="水梨" class="product-img">
+                            <div class="product-tag-container" data-fruit="pear"></div>
+                        </div>
                         <div class="product-info">
                             <h3>【清甜水潤】卓蘭特選尊爵高接梨禮盒</h3>
                             <p class="product-desc">果肉細緻多汁，甜度極高，清脆爽口，是炎炎夏日與高級送禮的極品。</p>
@@ -183,7 +191,10 @@
                         </div>
                     </div>
                     <div class="product-card">
-                        <div class="product-image-wrap"><img src="images/citrus-box.jpg" alt="柑橘" class="product-img"><span class="product-tag">時令預備</span></div>
+                        <div class="product-image-wrap">
+                            <img src="images/citrus-box.jpg" alt="柑橘" class="product-img">
+                            <div class="product-tag-container" data-fruit="citrus"></div>
+                        </div>
                         <div class="product-info">
                             <h3>【金牌柑橘】卓蘭老欉茂谷柑文創禮盒</h3>
                             <p class="product-desc">皮薄多汁，酸甜完美比例，搭配客家文化傳承包裝，送禮首選。</p>
@@ -262,7 +273,7 @@
 
     <footer class="site-footer">
         <div class="container footer-content">
-            <p>&copy; 2026 卓蘭水果商城 全權所有</p>
+            <p>&copy; 2026 卓蘭果蒔 全權所有</p>
         </div>
     </footer>
 
