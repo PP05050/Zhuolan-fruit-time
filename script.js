@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // 商品資料庫對照表 (新增水梨)
     const productsDb = {
-        'carambola': { name: '【特級】卓蘭正宗楊桃禮盒', price: 750 },
+        'carambola': { name: '【特級】卓蘭正宗楊桃禮盒', price: 650 },
         'grape': { name: '【優級】卓蘭巨峰葡萄珍藏禮盒', price: 880 },
-        'pear': { name: '【清甜水潤】卓蘭特選尊爵高接梨禮盒', price: 950 }, // 新增水梨
-        'citrus': { name: '【特級】卓蘭老欉茂谷柑文創禮盒', price: 680 }
+        'pear': { name: '【清甜水潤】卓蘭特選尊爵高接梨禮盒', price: 1299 }, // 新增水梨
+        'citrus': { name: '【特級】卓蘭老欉茂谷柑文創禮盒', price: 700 }
     };
 
     const cartContainer = document.getElementById('cart-items-container');
