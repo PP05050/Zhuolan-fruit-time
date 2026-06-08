@@ -1,24 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    // ==========================================
-    // API 端點設定 (請替換為您專屬的 Apps Script 網址)
-    // ==========================================
-    // 1. 客服機器人網址
     const CHATBOT_GAS_URL = 'https://script.google.com/macros/s/AKfycbw7gjjlikchMadz5mhrEZJjE-QU5qBgfJRp3sbH7WYmtfyxN4KkGNsa7m7tqHoeUSLb/exec';
     
-    // 2. 訂單總表網址
     const ORDER_GAS_URL = 'https://script.google.com/macros/s/AKfycbxIe23PqA_VNRXA_Tme9pu2Wp2iwvgy1LVOxzl7l2Ojq3O6qQUKIWO1t1BX83yUJhk/exec'; 
 
-    /// ==========================================
-    // 購物車系統與訂單提交邏輯
-    // ==========================================
-    let cart = []; // 購物車陣列
+    let cart = []; 
     
-    // 商品資料庫對照表 (新增水梨)
     const productsDb = {
         'carambola': { name: '【特級】卓蘭正宗楊桃禮盒', price: 650 },
         'grape': { name: '【優級】卓蘭巨峰葡萄珍藏禮盒', price: 880 },
-        'pear': { name: '【清甜水潤】卓蘭特選尊爵高接梨禮盒', price: 1299 }, // 新增水梨
+        'pear': { name: '【清甜水潤】卓蘭特選尊爵高接梨禮盒', price: 1299 }, 
         'citrus': { name: '【特級】卓蘭老欉茂谷柑文創禮盒', price: 700 }
     };
 
@@ -27,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const orderForm = document.getElementById('order-inquiry-form');
     const formStatus = document.getElementById('form-status');
 
-    // 1. 加入購物車功能
     const buyButtons = document.querySelectorAll('.buy-btn');
     buyButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -35,10 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const ctaName = this.getAttribute('data-cta-name');
             let productId = '';
             
-            // 判斷按鈕的資料標籤
             if (ctaName.includes('Carambola')) productId = 'carambola';
             else if (ctaName.includes('Grape')) productId = 'grape';
-            else if (ctaName.includes('Pear')) productId = 'pear'; // 新增水梨判斷
+            else if (ctaName.includes('Pear')) productId = 'pear'; 
             else if (ctaName.includes('Citrus')) productId = 'citrus';
 
             if (productId) {
@@ -49,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // 2. 處理購物車資料邏輯
     function addToCart(id) {
         const existingItem = cart.find(item => item.id === id);
         if (existingItem) {
@@ -71,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // 3. 渲染購物車畫面
     function renderCart() {
         if (!cartContainer) return;
         cartContainer.innerHTML = ''; 
@@ -101,14 +88,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.updateQty = updateQty;
 
-    // 4. 表單送出與資料庫串接 (含地址驗證)
     if (orderForm) {
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim(); // 抓取地址
+            const address = document.getElementById('address').value.trim(); 
             const message = document.getElementById('message').value.trim();
             
             if (!name || !phone || !address) {
@@ -127,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const payload = {
                 name: name,
                 phone: phone,
-                address: address, // 送出地址
+                address: address, 
                 cartDetails: orderDetails,
                 totalPrice: orderTotal,
                 message: message
@@ -174,12 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
             formStatus.style.color = "#374151";
         }
     }
-
-    // ==========================================
-    // 其他 UI 互動與客服機器人
-    // ==========================================
     
-    // GA4 事件追蹤
     const trackButtons = document.querySelectorAll('.track-cta');
     trackButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -194,7 +175,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // FAQ 手風琴
     const faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(question => {
         question.addEventListener('click', function() {
@@ -206,7 +186,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // 客服機器人
     const chatToggleBtn = document.getElementById('chat-toggle-btn');
     const chatWidget = document.getElementById('chat-widget');
     const closeChatBtn = document.getElementById('close-chat');
@@ -261,12 +240,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
     }
-    // ==========================================
-    // 自動偵測當季水果日曆系統
-    // ==========================================
-    const currentMonth = new Date().getMonth() + 1; // 取得顧客裝置的真實月份 (1-12)
-    
-    // 定義各項水果產季所涵蓋的月份陣列
+
+    const currentMonth = new Date().getMonth() + 1; 
     const fruitSeasons = {
         'citrus': [11, 12, 1, 2, 3, 4, 5],
         'carambola': [9, 10, 11, 12, 1, 2, 3, 4],
@@ -274,19 +249,43 @@ document.addEventListener("DOMContentLoaded", function() {
         'pear': [5, 6, 7, 9, 10]
     };
 
-    const calendarRows = document.querySelectorAll('#season-calendar tbody tr');
-    
-    if (calendarRows.length > 0) {
-        calendarRows.forEach(row => {
-            const fruitType = row.getAttribute('data-fruit');
-            
-            // 比對目前月份是否包含在該水果的產季陣列中
-            if (fruitType && fruitSeasons[fruitType].includes(currentMonth)) {
-                // 如果是當季，自動加上淡黃色背景與當季標籤
+    function updateSeasonalElements() {
+        document.querySelectorAll('#season-calendar tbody tr').forEach(row => {
+            const fruit = row.getAttribute('data-fruit');
+            if (fruit && fruitSeasons[fruit].includes(currentMonth)) {
                 row.classList.add('active-season');
                 const nameCell = row.querySelector('.fruit-name');
-                nameCell.innerHTML += ' <span class="current-tag">當季</span>';
+                if (nameCell && !nameCell.querySelector('.current-tag')) {
+                    nameCell.innerHTML += ' <span class="current-tag">當季</span>';
+                }
             }
+        });
+
+        document.querySelectorAll('.product-tag-container').forEach(container => {
+            const fruit = container.getAttribute('data-fruit');
+            if (fruit && fruitSeasons[fruit].includes(currentMonth)) {
+                container.innerHTML = '<span class="product-tag hot">當季首選</span>';
+            }
+        });
+    }
+
+    updateSeasonalElements();
+
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mainNav = document.getElementById('main-nav');
+
+    if (hamburgerBtn && mainNav) {
+        hamburgerBtn.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+        });
+
+        const navLinks = mainNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    mainNav.classList.remove('active');
+                }
+            });
         });
     }
 });
