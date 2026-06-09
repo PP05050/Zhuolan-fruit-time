@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
     const CHATBOT_GAS_URL = 'https://script.google.com/macros/s/AKfycbw7gjjlikchMadz5mhrEZJjE-QU5qBgfJRp3sbH7WYmtfyxN4KkGNsa7m7tqHoeUSLb/exec';
-    
     const ORDER_GAS_URL = 'https://script.google.com/macros/s/AKfycbxIe23PqA_VNRXA_Tme9pu2Wp2iwvgy1LVOxzl7l2Ojq3O6qQUKIWO1t1BX83yUJhk/exec'; 
 
     let cart = []; 
@@ -33,6 +32,20 @@ document.addEventListener("DOMContentLoaded", function() {
             if (productId) {
                 addToCart(productId);
                 alert(`已將 ${productsDb[productId].name} 加入預購清單！`);
+                
+                if (typeof gtag === 'function') {
+                    gtag('event', 'add_to_cart', {
+                        currency: 'TWD',
+                        value: productsDb[productId].price,
+                        items: [{
+                            item_id: productId,
+                            item_name: productsDb[productId].name,
+                            price: productsDb[productId].price,
+                            quantity: 1
+                        }]
+                    });
+                }
+                
                 document.getElementById('cta-form').scrollIntoView({ behavior: 'smooth' });
             }
         });
@@ -88,7 +101,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.updateQty = updateQty;
 
+    let hasStartedCheckout = false;
     if (orderForm) {
+        orderForm.addEventListener('input', function() {
+            if (!hasStartedCheckout && cart.length > 0) {
+                hasStartedCheckout = true;
+                let checkoutTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                let checkoutItems = cart.map(item => ({
+                    item_id: item.id,
+                    item_name: item.name,
+                    price: item.price,
+                    quantity: item.qty
+                }));
+                
+                if (typeof gtag === 'function') {
+                    gtag('event', 'begin_checkout', {
+                        currency: 'TWD',
+                        value: checkoutTotal,
+                        items: checkoutItems
+                    });
+                }
+            }
+        });
+
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -109,6 +144,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let orderDetails = cart.map(item => `${item.name} x ${item.qty}`).join('\n');
             let orderTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            const gaItems = cart.map(item => ({
+                item_id: item.id,
+                item_name: item.name,
+                price: item.price,
+                quantity: item.qty
+            }));
 
             const payload = {
                 name: name,
@@ -132,9 +174,21 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 if(data.status === "success") {
                     showStatus(`感謝您，${name}！您的預購單已成功送出，專人將盡快聯繫您。`, "success");
+                    
+                    if (typeof gtag === 'function') {
+                        const transactionId = 'T-' + new Date().getTime();
+                        gtag('event', 'purchase', {
+                            transaction_id: transactionId,
+                            value: orderTotal,
+                            currency: 'TWD',
+                            items: gaItems
+                        });
+                    }
+                    
                     orderForm.reset();
                     cart = []; 
                     renderCart();
+                    hasStartedCheckout = false;
                 } else {
                     showStatus("發生錯誤，請稍後再試。", "error");
                 }
